@@ -1,0 +1,303 @@
+<!--#start 50 -->
+<config configVersion='0' programVersion='1.0'>
+	<x_forwarded_for>0</x_forwarded_for>
+	<vh_templete index='index.php' name='php:php56' templete='html'>
+		<map allow_method='*' extend='cmd:php56' file_ext='php'/>
+	</vh_templete>
+	<vh_templete index='index.php' name='php:php74' templete='html'>
+		<map allow_method='*' extend='cmd:php74' file_ext='php'/>
+	</vh_templete>
+	<vh_templete index='index.php' name='php:php83' templete='html'>
+		<map allow_method='*' extend='cmd:php83' file_ext='php'/>
+	</vh_templete>
+	<unix_socket>1</unix_socket>
+	<timeout>60</timeout>
+	<server_software>kangle/funnycups</server_software>
+	<run user=''/>
+	<remove_accept_encoding>1</remove_accept_encoding>
+	<process_cpu_usage>0</process_cpu_usage>
+	<path_info>1</path_info>
+	<min_free_thread>0</min_free_thread>
+	<max_post_size>10G</max_post_size>
+	<log_handle_concurrent>2</log_handle_concurrent>
+	<log_event_id>1</log_event_id>
+	<listen ip='*' port='80' type='http'/>
+	<listen ip='*' port='3311' type='manage'/>
+	<listen certificate='' certificate_key='' cipher='' http2='1' ip='*' port='3312' protocols='' type='http'/>
+	<listen certificate='' certificate_key='' cipher='' http2='1' ip='*' port='3313' protocols='' type='http'/>
+	<lang>zh_CN</lang>
+	<keep_alive_count>2000</keep_alive_count>
+	<keep_alive>30</keep_alive>
+	<insert_via>0</insert_via>
+	<hostname>kangle web server</hostname>
+	<gzip default='0' gzip_level='5' min_gzip_length='256' only_gzip_cache='0'/>
+	<connect_timeout>10</connect_timeout>
+	<connect max='1000000' max_per_ip='65535'/>
+	<compress br_level='5' gzip_level='5' min_length='512' only_cache='0' zstd_level='5'/>
+	<charset>gbk</charset>
+	<cache cache_part='1' default='1' disk='5G' disk_dir='/var/cache/kangle' max_bigobj_size='2G' max_cache_size='1M' memory='50M' refresh_time='31536000'/>
+	<bl_time>600</bl_time>
+	<autoupdate install='0' type='off'/>
+	<attack enable='0' max_request='30' path_info='1' total_seconds='20'/>
+	<attack cc_key='__SAKURA' wl_time='7200'/>
+	<async_io>1</async_io>
+	<admin admin_ips='127.0.0.1|*' password='kangle' user='admin'/>
+	<access_log_handle>/usr/bin/gzip ${log_file}</access_log_handle>
+	<CreateProcess>AsUser</CreateProcess>
+	<log error_rotate_size='2M' level='3' log_handle='1' logs_day='7' logs_size='2G' rotate_size='50M' rotate_time='0 0 * * *'/>
+	<log level='3' logs_day='60' rotate_time='0 0 * * *'/>
+	<api file='buildin:whm' name='whm'/>
+	<cmd file='/bin/php-cgi8.3' listen='local' lock='0' name='php83' proto='fastcgi' type='mp'>
+		<pre_event dst_file='/tmp/php-${name}.ini' src_file='/etc/php/8.3/cli/php.ini'/>
+		<env PHPRC='/tmp/php-${name}.ini' PHP_FCGI_MAX_REQUESTS='0'/>
+	</cmd>
+	<cmd file='/bin/php-cgi7.4' listen='local' lock='0' name='php74' proto='fastcgi' type='mp'>
+		<pre_event dst_file='/tmp/php-${name}.ini' src_file='/etc/php/7.4/cli/php.ini'/>
+		<env PHPRC='/tmp/php-${name}.ini' PHP_FCGI_MAX_REQUESTS='0'/>
+	</cmd>
+	<cmd file='/bin/php-cgi5.6' listen='local' lock='0' name='php56' proto='fastcgi' type='mp'>
+		<pre_event dst_file='/tmp/php-${name}.ini' src_file='/etc/php/5.6/cli/php.ini'/>
+		<env PHPRC='/tmp/php-${name}.ini' PHP_FCGI_MAX_REQUESTS='0'/>
+	</cmd>
+	<request action='vhs'>
+		<table name='BEGIN'>
+			<chain action='deny'>
+				<mark module='check_black_list'/>
+			</chain>
+			<chain action='deny'>
+				<acl meth='HEAD' module='meth'/>
+			</chain>
+			<chain action='continue'>
+				<mark header='X-Real-Ip' module='replace_ip'/>
+			</chain>
+			<chain action='continue'>
+				<mark age='1' always_online='1' module='flag' x_cache='1' x_real_ip='1'/>
+			</chain>
+			<chain action='continue'>
+				<acl icase='1' module='file_ext' split='|' v='xml'/>
+				<mark module='flag' no_cache='1'/>
+			</chain>
+			<chain action='continue'>
+				<acl module='ip_rate' request='0' second='1'/>
+				<mark cache='0' flow='0' module='flow'/>
+			</chain>
+			<chain action='continue'>
+				<acl icase='1' module='file_ext' split='|' v='gif|jpeg|jpg|png'/>
+				<mark max='0' module='webp' quality='75'/>
+			</chain>
+		</table>
+	</request>
+	<response action='allow'>
+		<table name='BEGIN'>
+			<chain action='continue'>
+				<acl header='Content-Type' module='header' val='(text/*)|(javascript)'/>
+				<mark flagvalue='compress' module='response_flag'/>
+			</chain>
+			<chain action='continue'>
+				<acl header='Content-Type' module='header' val='(text/*)|(javascript)'/>
+				<mark attr='Vary' module='add_header' val='Accept-Encoding'/>
+			</chain>
+			<chain action='continue'>
+				<mark cookie='.' http_only='1' module='cookie'/>
+			</chain>
+			<chain action='continue'>
+				<acl icase='1' module='file_ext' split='|' v='3gp|7z|apk|avi|bdmv|bmp|bz2|css|csv|dat|db|deb|dll|dmg|doc|exe|f4v|flv|gif|gz|ico|img|inf|iso|jar|jpeg|jpg|js|letv|log|m2ts|map|md5|mkv|mp3|mp4|msi|old|otf|pac|pdf|png|rar|rpm|sh|swf|tar|test|torrent|ttf|txt|txz|webp|wim|xz|zip'/>
+				<acl code='400' module='status_code' op='lt'/>
+				<mark max_age='31536000' module='cache_control'/>
+			</chain>
+			<chain action='continue'>
+				<acl code='400' module='status_code' op='gt'/>
+				<mark flagvalue='nocache,nodiskcache,' module='response_flag'/>
+			</chain>
+			<chain action='continue'>
+				<acl module='listen_ports' split='|' v='3313'/>
+				<acl module='reg_path' nc='1' path='/mysql/(changelog|url).php'/>
+				<mark attr='X-Frame-Options' module='add_header' val='SAMEORIGIN'/>
+			</chain>
+			<chain action='deny'>
+				<acl header='Content-Type' module='header' nc='1' val='text/html'/>
+				<acl header='Cache-Control' module='header' nc='1' val='pre-check=10800'/>
+				<acl header='WWW-Authenticate' module='header' nc='1' revers='1' val='Basic realm="phpMyAdmin localhost"'/>
+				<acl header='X-Frame-Options' module='header' nc='1' revers='1' val='SAMEORIGIN'/>
+				<acl module='listen_ports' split='|' v='3313'/>
+			</chain>
+		</table>
+	</response>
+	<vhs error_403='/403.html' error_404='/404.html' index='index.html,index.htm'>
+		<mime_type ext='zlib' max_age='31536000' type='application/x-deflate'/>
+		<mime_type ext='zip' max_age='31536000' type='application/x-zip-compressed'/>
+		<mime_type ext='xwd' gzip='1' max_age='31536000' type='image/x-xwindowdump'/>
+		<mime_type ext='xpm' gzip='1' max_age='31536000' type='image/x-xpixmap'/>
+		<mime_type ext='xml' gzip='1' max_age='31536000' type='text/xml'/>
+		<mime_type ext='xls' max_age='31536000' type='application/msexcel'/>
+		<mime_type ext='xbm' gzip='1' max_age='31536000' type='image/x-xbitmap'/>
+		<mime_type ext='wmv' max_age='31536000' type='video/x-ms-wmv'/>
+		<mime_type ext='wmlsc' gzip='1' max_age='31536000' type='text/vnd.wap.wmlscript'/>
+		<mime_type ext='wmls' gzip='1' max_age='31536000' type='text/vnd.wap.wmlscript'/>
+		<mime_type ext='wmlc' max_age='31536000' type='application/vnd.wap.wmlc'/>
+		<mime_type ext='wml' gzip='1' max_age='31536000' type='text/vnd.wap.wml'/>
+		<mime_type ext='webp' gzip='1' max_age='31536000' type='image/webp'/>
+		<mime_type ext='webm' max_age='31536000' type='video/webm'/>
+		<mime_type ext='wbmp' gzip='1' max_age='31536000' type='image/vnd.wap.wmbp'/>
+		<mime_type ext='wav' max_age='31536000' type='audio/x-wav'/>
+		<mime_type ext='war' max_age='31536000' type='application/java-archive'/>
+		<mime_type ext='vcs' gzip='1' max_age='31536000' type='text/x-vcalendar'/>
+		<mime_type ext='vcf' gzip='1' max_age='31536000' type='text/v-vcard'/>
+		<mime_type ext='ustar' max_age='31536000' type='application/x-ustar'/>
+		<mime_type ext='tsv' gzip='1' max_age='31536000' type='text/tab-separated-values'/>
+		<mime_type ext='tr' max_age='31536000' type='application/x-troff'/>
+		<mime_type ext='tiff' gzip='1' max_age='31536000' type='image/tiff'/>
+		<mime_type ext='tif' gzip='1' max_age='31536000' type='image/tiff'/>
+		<mime_type ext='tgz' max_age='31536000' type='application/x-tar'/>
+		<mime_type ext='texinfo' max_age='31536000' type='application/x-texinfo'/>
+		<mime_type ext='texi' max_age='31536000' type='application/x-texinfo'/>
+		<mime_type ext='tex' max_age='31536000' type='application/x-tex'/>
+		<mime_type ext='tcl' max_age='31536000' type='application/x-tcl'/>
+		<mime_type ext='tar' max_age='31536000' type='application/x-tar'/>
+		<mime_type ext='t' max_age='31536000' type='application/x-troff'/>
+		<mime_type ext='swf' max_age='31536000' type='application/x-shockwave-flash'/>
+		<mime_type ext='svgz' gzip='1' max_age='31536000' type='image/svg+xml'/>
+		<mime_type ext='svg' gzip='1' max_age='31536000' type='image/svg+xml'/>
+		<mime_type ext='sv4crc' max_age='31536000' type='application/x-sv4crc'/>
+		<mime_type ext='sv4cpio' max_age='31536000' type='application/x-sv4cpio'/>
+		<mime_type ext='src' max_age='31536000' type='application/x-wais-source'/>
+		<mime_type ext='snd' max_age='31536000' type='audio/basic'/>
+		<mime_type ext='slc' max_age='31536000' type='application/vnd.wap.slc'/>
+		<mime_type ext='sl' gzip='1' max_age='31536000' type='text/vnd.wap.sl'/>
+		<mime_type ext='sit' max_age='31536000' type='application/stuffit'/>
+		<mime_type ext='sis' max_age='31536000' type='application/vnd.symbian.install'/>
+		<mime_type ext='sic' max_age='31536000' type='application/vnd.wap.sic'/>
+		<mime_type ext='si' gzip='1' max_age='31536000' type='text/vnd.wap.si'/>
+		<mime_type ext='shar' max_age='31536000' type='application/x-shar'/>
+		<mime_type ext='sh' max_age='31536000' type='application/x-sh'/>
+		<mime_type ext='rtx' gzip='1' max_age='31536000' type='text/richtext'/>
+		<mime_type ext='rtf' max_age='31536000' type='application/x-rtf'/>
+		<mime_type ext='rss' max_age='31536000' type='application/rss+xml'/>
+		<mime_type ext='rpm' max_age='31536000' type='application/x-rpm'/>
+		<mime_type ext='roff' max_age='31536000' type='application/x-troff'/>
+		<mime_type ext='rng' max_age='31536000' type='application/vnd.nokie.ringing-tone'/>
+		<mime_type ext='rgb' gzip='1' max_age='31536000' type='image/x-rgb'/>
+		<mime_type ext='ras' gzip='1' max_age='31536000' type='image/cmu-raster'/>
+		<mime_type ext='rar' max_age='31536000' type='application/x-rar-compressed'/>
+		<mime_type ext='qt' max_age='31536000' type='video/quicktime'/>
+		<mime_type ext='qcp' max_age='31536000' type='audio/vnd.qcelp'/>
+		<mime_type ext='ps' max_age='31536000' type='application/postscript'/>
+		<mime_type ext='ppm' gzip='1' max_age='31536000' type='image/x-portable-pixmap'/>
+		<mime_type ext='pnm' gzip='1' max_age='31536000' type='image/x-portable-anymap'/>
+		<mime_type ext='png' gzip='1' max_age='31536000' type='image/png'/>
+		<mime_type ext='pmd' max_age='31536000' type='application/x-pmd'/>
+		<mime_type ext='pict' max_age='31536000' type='application/pict'/>
+		<mime_type ext='pic' max_age='31536000' type='application/pict'/>
+		<mime_type ext='pgm' gzip='1' max_age='31536000' type='image/x-portable-graymap'/>
+		<mime_type ext='pdf' max_age='31536000' type='application/pdf'/>
+		<mime_type ext='pbm' gzip='1' max_age='31536000' type='image/x-portable-bitmap'/>
+		<mime_type ext='oda' max_age='31536000' type='application/oda'/>
+		<mime_type ext='nqd' max_age='31536000' type='application/vnd.nokia.gamedata'/>
+		<mime_type ext='nok' gzip='1' max_age='31536000' type='image/vnd.nok-oplogo-colornokia-op-logo'/>
+		<mime_type ext='ngd' max_age='31536000' type='application/x-nokiagamedata'/>
+		<mime_type ext='nc' max_age='31536000' type='application/x-netcdf'/>
+		<mime_type ext='n3a' gzip='1' max_age='31536000' type='image/vnd.nok-3dscreensaver'/>
+		<mime_type ext='mwrt' max_age='31536000' type='application/macwriteii'/>
+		<mime_type ext='msw' max_age='31536000' type='application/msword'/>
+		<mime_type ext='ms' max_age='31536000' type='application/x-troff-ms'/>
+		<mime_type ext='mpg' max_age='31536000' type='video/mpeg'/>
+		<mime_type ext='mpeg' max_age='31536000' type='video/mpeg'/>
+		<mime_type ext='mpe' max_age='31536000' type='video/mpeg'/>
+		<mime_type ext='mp4' max_age='31536000' type='video/mp4'/>
+		<mime_type ext='mp3' max_age='31536000' type='audio/mpeg'/>
+		<mime_type ext='mp2' max_age='31536000' type='audio/basic'/>
+		<mime_type ext='movie' max_age='31536000' type='video/x-sgi-movie'/>
+		<mime_type ext='mov' max_age='31536000' type='video/quicktime'/>
+		<mime_type ext='mml' gzip='1' max_age='31536000' type='text/mathml'/>
+		<mime_type ext='mmf' max_age='31536000' type='application/x-smaf'/>
+		<mime_type ext='mif' max_age='31536000' type='application/x-mif'/>
+		<mime_type ext='midi' max_age='31536000' type='audio/midi'/>
+		<mime_type ext='mid' max_age='31536000' type='audio/midi'/>
+		<mime_type ext='me' max_age='31536000' type='application/x-troff-me'/>
+		<mime_type ext='mbm' gzip='1' max_age='31536000' type='image/x-epoc-mbm'/>
+		<mime_type ext='man' max_age='31536000' type='application/x-troff-man'/>
+		<mime_type ext='m' gzip='1' max_age='31536000' type='text/plain'/>
+		<mime_type ext='lzh' max_age='31536000' type='application/x-lha-compressed'/>
+		<mime_type ext='lsm' gzip='1' max_age='31536000' type='text/plain'/>
+		<mime_type ext='lha' max_age='31536000' type='application/x-lha-compressed'/>
+		<mime_type ext='latex' max_age='31536000' type='application/x-latex'/>
+		<mime_type ext='js' gzip='1' max_age='31536000' type='application/x-javascript'/>
+		<mime_type ext='jpg' gzip='1' max_age='31536000' type='image/jpeg'/>
+		<mime_type ext='jpeg' gzip='1' max_age='31536000' type='image/jpeg'/>
+		<mime_type ext='jpe' gzip='1' max_age='31536000' type='image/jpeg'/>
+		<mime_type ext='jng' gzip='1' max_age='31536000' type='image/x-jng'/>
+		<mime_type ext='jar' max_age='31536000' type='application/java-archive'/>
+		<mime_type ext='jad' gzip='1' max_age='31536000' type='text/vnd.sun.j2me.app-descriptor'/>
+		<mime_type ext='ief' gzip='1' max_age='31536000' type='image/ief'/>
+		<mime_type ext='ico' gzip='1' max_age='31536000' type='image/x-icon'/>
+		<mime_type ext='html' gzip='1' max_age='31536000' type='text/html'/>
+		<mime_type ext='htm' gzip='1' max_age='31536000' type='text/html'/>
+		<mime_type ext='hqx' max_age='31536000' type='application/mac-binhex40'/>
+		<mime_type ext='hh' gzip='1' max_age='31536000' type='text/plain'/>
+		<mime_type ext='hdf' max_age='31536000' type='application/x-hdf'/>
+		<mime_type ext='h' gzip='1' max_age='31536000' type='text/plain'/>
+		<mime_type ext='gz' max_age='31536000' type='application/x-tar'/>
+		<mime_type ext='gtar' max_age='31536000' type='application/x-gtar'/>
+		<mime_type ext='gif' gzip='1' max_age='31536000' type='image/gif'/>
+		<mime_type ext='flv' max_age='31536000' type='video/x-flv'/>
+		<mime_type ext='f90' gzip='1' max_age='31536000' type='text/plain'/>
+		<mime_type ext='exe' max_age='31536000' type='application/octet-stream'/>
+		<mime_type ext='etx' gzip='1' max_age='31536000' type='text/x-setext'/>
+		<mime_type ext='eps' max_age='31536000' type='application/postscript'/>
+		<mime_type ext='ear' max_age='31536000' type='application/java-archive'/>
+		<mime_type ext='dvi' max_age='31536000' type='application/x-dvi'/>
+		<mime_type ext='doc' max_age='31536000' type='application/msword'/>
+		<mime_type ext='dll' max_age='31536000' type='application/octet-stream'/>
+		<mime_type ext='css' gzip='1' max_age='31536000' type='text/css'/>
+		<mime_type ext='csh' max_age='31536000' type='application/x-csh'/>
+		<mime_type ext='cpp' gzip='1' max_age='31536000' type='text/plain'/>
+		<mime_type ext='cpio' max_age='31536000' type='application/x-cpio'/>
+		<mime_type ext='core' max_age='31536000' type='application/octet-stream'/>
+		<mime_type ext='cod' gzip='1' max_age='31536000' type='text/x-co-desc'/>
+		<mime_type ext='cdf' max_age='31536000' type='application/x-netcdf'/>
+		<mime_type ext='cc' gzip='1' max_age='31536000' type='text/plain'/>
+		<mime_type ext='cab' max_age='31536000' type='application/octet-stream'/>
+		<mime_type ext='c' gzip='1' max_age='31536000' type='text/plain'/>
+		<mime_type ext='bmp' gzip='1' max_age='31536000' type='image/x-bmp'/>
+		<mime_type ext='bin' max_age='31536000' type='application/macbinary'/>
+		<mime_type ext='bcpio' max_age='31536000' type='application/x-bcpio'/>
+		<mime_type ext='avi' max_age='31536000' type='video/x-msvideo'/>
+		<mime_type ext='au' max_age='31536000' type='audio/basic'/>
+		<mime_type ext='atom' max_age='31536000' type='application/atom+xml'/>
+		<mime_type ext='arj' max_age='31536000' type='application/x-arj-compressed'/>
+		<mime_type ext='amr' max_age='31536000' type='audio/amr'/>
+		<mime_type ext='aiff' max_age='31536000' type='audio/x-aiff'/>
+		<mime_type ext='aifc' max_age='31536000' type='audio/x-aiff'/>
+		<mime_type ext='aif' max_age='31536000' type='audio/x-aiff'/>
+		<mime_type ext='ai' max_age='31536000' type='application/postscript'/>
+		<mime_type ext='Z' max_age='31536000' type='application/x-tar'/>
+		<mime_type ext='3gpp' max_age='31536000' type='video/3gpp'/>
+		<mime_type ext='3gp' max_age='31536000' type='video/3gpp'/>
+		<mime_type ext='*' gzip='1' max_age='31536000' type='text/plain'/>
+		<map_file allow_method='*' confirm_file='0' ext='php' extend='cmd:php83'/>
+	</vhs>
+	<vhs index='index.php'>
+		<map allow_method='*' extend='cmd:php56' file_ext='php'/>
+	</vhs>
+	<vhs index='index.php'>
+		<map allow_method='*' extend='cmd:php74' file_ext='php'/>
+	</vhs>
+	<vhs index='index.php'>
+		<map allow_method='*' extend='cmd:php83' file_ext='php'/>
+	</vhs>
+	<vh doc_root='www' name='default'>
+		<index file='index.php'/>
+		<host>*</host>
+		<mime_type ext='html' gzip='1' max_age='10' type='text/html'/>
+		<map_file allow_method='*' confirm_file='0' ext='php' extend='cmd:php83' name='default'/>
+	</vh>
+	<vh access='' app='1' app_share='0' certificate='' certificate_key='' cipher='' doc_root='nodewww/dbadmin' group='' htaccess='' inherit='0' log_file='' log_handle='on' log_mkdir='off' log_rotate_size='0' log_rotate_time='' logs_day='0' logs_size='0' max_connect='0' max_queue='0' max_worker='0' name='_dbadmin' protocols='' speed_limit='0' status='0' user=''>
+		<index file='index.html'/>
+		<index file='index.php'/>
+		<host dir=''>*</host>
+		<bind>!*:3313</bind>
+		<map_file allow_method='*' confirm_file='0' ext='php' extend='cmd:php83' name='_dbadmin'/>
+	</vh>
+</config>
+
+<!--configfileisok-->
