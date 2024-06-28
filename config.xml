@@ -287,6 +287,7 @@
 	</vhs>
 	<vh doc_root='www' name='default'>
 		<index file='index.php'/>
+		<index file='index.html'/>
 		<host>*</host>
 		<mime_type ext='html' gzip='1' max_age='10' type='text/html'/>
 		<map_file allow_method='*' confirm_file='0' ext='php' extend='cmd:php83' name='default'/>
