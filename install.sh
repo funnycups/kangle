@@ -12,8 +12,8 @@ center_print() {
 }
 center_print "=============================================================
 Kangle one click installation
-Install kangle web server 3.6.0, MySQL, PHP and PHPMyAdmin.
-By default, kangle would be built with http3, kwebp and kwaf support, and PHP5.6, PHP7.4 and PHP8.3 are going to be installed.
+This script will build and install kangle 3.6.0 with support for HTTP/3, kwebp, and kwaf.
+MySQL8, PHPMyAdmin and multiple versions of PHP (5.6, 7.4, and 8.3) would be installed.
 More detailed information at
 https://www.xh-ws.com/archives/install_kangle_on_ubuntu.html
 ============================================================="
