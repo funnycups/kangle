@@ -10,3 +10,4 @@ Usage:
 ```shell
 curl -s https://raw.githubusercontent.com/funnycups/kangle/main/install.sh|bash
 ```
+More detail information at https://www.xh-ws.com/archives/install_kangle_on_ubuntu.html
