@@ -22,9 +22,11 @@ echo
 read -p "Please enter your desired MySQL password. It must be at least 8 characters long and include numbers, both uppercase and lowercase letters, special characters, and not be a common dictionary word:" mysql_password
 
 #install essentials
+sed -i 's/#$nrconf{restart} = '"'"'i'"'"';/$nrconf{restart} = '"'"'a'"'"';/g' /etc/needrestart/needrestart.conf
+apt update -y
 apt install -y git cmake make curl wget zip unzip build-essential zlib1g zlib1g-dev libssl-dev\
-libevent-dev libjpeg-dev libpng-dev libtiff-dev pkg-config autoconf bison re2c libxml2-dev libsqlite3-dev\
-libcurl4-gnutls-dev libfreetype-dev libonigdev
+ libevent-dev libjpeg-dev libpng-dev libtiff-dev pkg-config autoconf bison re2c libxml2-dev libsqlite3-dev\
+ libcurl4-gnutls-dev libfreetype-dev libonig-dev
 
 #download zstd
 cd ~
@@ -37,7 +39,7 @@ cd ~/install
 wget https://github.com/google/brotli/archive/refs/tags/v1.0.9.tar.gz -O brotli.tar.gz
 tar zxf brotli.tar.gz
 rm -rf brotli.tar.gz
-cd brotli
+cd brotli-1.0.9
 mkdir out
 cd out
 cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF ..
@@ -120,13 +122,15 @@ exit;
 EOF
 
 #install PHP
-add-apt-repository ppa:ondrej/php
+add-apt-repository ppa:ondrej/php<<EOF
+
+EOF
 apt install -y php{5.6,7.4,8.3} php{5.6,7.4,8.3}-{cgi,fpm,curl,mysql,gd,xml,mbstring,zip,intl,soap,bcmath,opcache,gmagick,common,memcached,mcrypt,redis,apcu,ldap}
 
 #install PHPMyAdmin
 cd /vhs/kangle
-mkdir -p nodewww
-cd nodewww
+mkdir -p nodewww/dbadmin
+cd nodewww/dbadmin
 wget https://files.phpmyadmin.net/phpMyAdmin/5.2.1/phpMyAdmin-5.2.1-all-languages.zip
 unzip phpMyAdmin-5.2.1-all-languages.zip
 rm -rf phpMyAdmin-5.2.1-all-languages.zip
@@ -144,6 +148,10 @@ wget -O config.xml https://raw.githubusercontent.com/funnycups/kangle/main/confi
 
 #start Kangle
 systemctl start kangle
+
+#remove temp files
+cd ~
+rm -rf install
 
 center_print "=============================================================
 All done!
