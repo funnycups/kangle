@@ -23,7 +23,6 @@
 	<log_event_id>1</log_event_id>
 	<listen ip='*' port='80' type='http'/>
 	<listen ip='*' port='3311' type='manage'/>
-	<listen certificate='' certificate_key='' cipher='' http2='1' ip='*' port='3312' protocols='' type='http'/>
 	<listen certificate='' certificate_key='' cipher='' http2='1' ip='*' port='3313' protocols='' type='http'/>
 	<lang>zh_CN</lang>
 	<keep_alive_count>2000</keep_alive_count>
