@@ -136,13 +136,17 @@ unzip phpMyAdmin-5.2.1-all-languages.zip
 rm -rf phpMyAdmin-5.2.1-all-languages.zip
 mv phpMyAdmin-5.2.1-all-languages mysql
 
-#set index page
+#set up easypanel
+apt install php5.6-sqlite3
+
+
+#set up index page
 cd /vhs/kangle
 mkdir -p www
 cd www
 wget -O index.html https://oss.xh-ws.com
 
-#set etc config
+#set up etc config
 cd /vhs/kangle/etc
 wget -O config.xml https://raw.githubusercontent.com/funnycups/kangle/main/config.xml
 
