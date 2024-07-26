@@ -8,6 +8,6 @@ Additionally, the script will also install MySQL8, PHPMyAdmin and multiple versi
 Usage:
 
 ```shell
-curl -s https://raw.githubusercontent.com/funnycups/kangle/main/install.sh|bash
+wget -q https://raw.githubusercontent.com/funnycups/kangle/main/install.sh && bash install.sh
 ```
 More detail information at https://www.xh-ws.com/archives/install_kangle_on_ubuntu.html
