@@ -181,10 +181,11 @@ echo 'SHELL=/bin/bash
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 HOME=/
 */5 * * * * root /bin/php-cgi5.6 -c /etc/php/5.6/cli/php.ini /vhs/kangle/nodewww/webftp/framework/shell.php sync_flow' > /etc/cron.d/ep_sync_flow
-systemctl restart crond
+systemctl restart cron
 chattr +i /etc/cron.d/ep_sync_flow
 EASYPANEL_INTRO="Easypanel is at http://127.0.0.1:3312/admin
 "
+ln -s /bin/wget /vhs/kangle/bin/
 fi
 
 #set up index page
@@ -200,7 +201,7 @@ wget -O config.xml https://raw.githubusercontent.com/funnycups/kangle/main/confi
 else
 wget -O config.xml https://raw.githubusercontent.com/funnycups/kangle/main/config-3.5.21.16.xml
 cd /vhs/kangle/ext
-wget -O php.zip https://raw.githubusercontent.com/funnycups/kangle/main/tpl_php.zip
+wget https://raw.githubusercontent.com/funnycups/kangle/main/tpl_php.zip
 unzip -o tpl_php.zip
 rm -rf tpl_php.zip
 fi
