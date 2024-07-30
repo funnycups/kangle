@@ -1,9 +1,14 @@
 # kangle
-A shell script to install kangle web server on Ubuntu.
+A shell script to install [kangle web server](https://github.com/keengo99/kangle) on Ubuntu.
 
-This script will build and install kangle 3.6.0 with support for HTTP/3, kwebp, and kwaf.
+This script will build and install kangle, with two versions available:
 
-Additionally, the script will also install MySQL8, PHPMyAdmin and multiple versions of PHP (5.6, 7.4, and 8.3).
+* kangle 3.6.0 with support for HTTP/3, kwebp, and kwaf.
+* kangle 3.5.21.16
+
+[Easypanel](https://github.com/netcccyun/easypanel) will also be automatically installed if you choose to install kangle 3.5.21.16.
+
+Additionally, the script will install MySQL8, PHPMyAdmin and multiple versions of PHP (5.6, 7.4, and 8.3).
 
 Usage:
 
