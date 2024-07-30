@@ -4,7 +4,7 @@ A shell script to install [kangle web server](https://github.com/keengo99/kangle
 This script will build and install kangle, with two versions available:
 
 * kangle 3.6.0 with support for HTTP/3, kwebp, and kwaf.
-* kangle 3.5.21.16
+* kangle 3.5.21.16, with pre-compiled executable files from [here](https://github.com/1265578519/kangle)
 
 [Easypanel](https://github.com/netcccyun/easypanel) will also be automatically installed if you choose to install kangle 3.5.21.16.
 
