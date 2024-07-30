@@ -191,7 +191,7 @@ fi
 cd /vhs/kangle
 mkdir -p www
 cd www
-wget -O index.html https://oss.xh-ws.com
+wget -O index.html https://raw.githubusercontent.com/funnycups/kangle/main/index.html
 
 #set up etc config
 cd /vhs/kangle/etc
