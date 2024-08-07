@@ -135,6 +135,7 @@ if [[ $mysql_password ]];then
 #install MySQL
 apt install -y mysql-server
 mysql<<EOF
+USE mysql;
 UPDATE user SET plugin='mysql_native_password' WHERE User='root';
 flush privileges;
 ALTER USER root@localhost IDENTIFIED WITH mysql_native_password BY '$mysql_password';
@@ -150,7 +151,8 @@ wget https://files.phpmyadmin.net/phpMyAdmin/5.2.1/phpMyAdmin-5.2.1-all-language
 unzip phpMyAdmin-5.2.1-all-languages.zip
 rm -rf phpMyAdmin-5.2.1-all-languages.zip
 mv phpMyAdmin-5.2.1-all-languages mysql
-
+cd mysql
+mv config.sample.inc.php config.inc.php
 MYSQL_INTRO="PHPMyAdmin is at http://127.0.0.1:3313/mysql
 Your mysql root password is $mysql_password
 "
@@ -161,12 +163,12 @@ fi
 add-apt-repository ppa:ondrej/php<<EOF
 
 EOF
-apt install -y php{5.6,7.4,8.3} php{5.6,7.4,8.3}-{cgi,fpm,curl,mysql,gd,xml,mbstring,zip,intl,soap,bcmath,opcache,gmagick,common,memcached,mcrypt,redis,apcu,ldap}
+apt install -y php{5.6,7.4,8.3} php{5.6,7.4,8.3}-{cgi,fpm,curl,mysql,gd,xml,mbstring,zip,intl,soap,bcmath,opcache,gmagick,common,memcached,mcrypt,redis,apcu,ldap} php-mbstring
 
 #set up easypanel
 EASYPANEL_INTRO=
 if [[ $kangle_ver == 2 ]];then
-apt install php5.6-sqlite3
+apt install php7.4-sqlite3
 cd ~/install
 wget https://raw.githubusercontent.com/funnycups/kangle/main/easypanel-2.6.26.tar.gz -O easypanel.tar.gz
 tar zxvf easypanel.tar.gz
