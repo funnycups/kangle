@@ -78,7 +78,7 @@ git submodule update --init --recursive
 mkdir build
 cd build
 mkdir -p /vhs/kangle
-cmake -DCMAKE_INSTALL_PREFIX=/vhs/kangle -DZSTD_DIR=~/install/zstd -DENABLE_BROTLI=ON -DBORINGSSL_DIR=~/install/boringssl -DLSQUIC_DIR=~/install/lsquic ..
+cmake -DCMAKE_INSTALL_PREFIX=/vhs/kangle -DZSTD_DIR=~/install/zstd -DENABLE_BROTLI=ON -DBORINGSSL_DIR=~/install/boringssl -DLSQUIC_DIR=~/install/lsquic -DENABLE_FCONTEXT=1 ..
 make && make install
 else
 wget https://raw.githubusercontent.com/funnycups/kangle/main/kangle-3.5.21.16.tar.gz -O kangle.tar.gz
