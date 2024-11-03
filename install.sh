@@ -163,8 +163,11 @@ fi
 add-apt-repository ppa:ondrej/php<<EOF
 
 EOF
+if [[ $mysql_password ]];then
 apt install -y php{5.6,7.4,8.3} php{5.6,7.4,8.3}-{cgi,fpm,curl,mysql,gd,xml,mbstring,zip,intl,soap,bcmath,opcache,gmagick,common,memcached,mcrypt,redis,apcu,ldap} php-mbstring
-
+else
+apt install -y php{5.6,7.4,8.3} php{5.6,7.4,8.3}-{cgi,fpm,curl,gd,xml,mbstring,zip,intl,soap,bcmath,opcache,gmagick,common,memcached,mcrypt,redis,apcu,ldap} php-mbstring
+fi
 #set up easypanel
 EASYPANEL_INTRO=
 if [[ $kangle_ver == 2 ]];then
