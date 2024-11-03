@@ -18,17 +18,20 @@ wget -q https://raw.githubusercontent.com/funnycups/kangle/main/install.sh && ba
 More detail information at https://www.xh-ws.com/archives/install_kangle_on_ubuntu.html
 
 ## Changelog
-### Jun 27, 2024
-- Initial release.
+### Nov 4, 2024
+- Bug fix for php-mysql and PHPMyAdmin.
 
-### Jul 26, 2024
-- Bug fix.
-
-### Jul 30, 2024
-- Add support for kangle 3.5.21.16+easypanel.
+### Aug 13, 2024
+- Add support for boost fcontext.
 
 ### Aug 7, 2024
 - Fix bugs related to MySQL installation and configuration.
 
-### Aug 13, 2024
-- Add support for boost fcontext.
+### Jul 30, 2024
+- Add support for kangle 3.5.21.16+easypanel.
+
+### Jul 26, 2024
+- Bug fix.
+
+### Jun 27, 2024
+- Initial release.
