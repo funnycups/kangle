@@ -156,8 +156,9 @@ fi
 MYSQL_INTRO=
 if [[ $mysql_password ]];then
 #install MySQL
-apt install -y mysql-server
-mysql<<EOF
+if [[ $os == "ubuntu" ]];then
+	apt install -y mysql-server
+	mysql<<EOF
 USE mysql;
 UPDATE user SET plugin='mysql_native_password' WHERE User='root';
 flush privileges;
@@ -165,6 +166,15 @@ ALTER USER root@localhost IDENTIFIED WITH mysql_native_password BY '$mysql_passw
 flush privileges;
 exit;
 EOF
+else
+	apt install -y mariadb-server
+	mysql<<EOF
+USE mysql;
+ALTER USER root@localhost IDENTIFIED BY '$mysql_password';
+flush privileges;
+exit;
+EOF
+fi
 
 #install PHPMyAdmin
 cd /vhs/kangle
