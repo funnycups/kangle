@@ -10,6 +10,11 @@ center_print() {
         echo "${padding}${text}"
     done
 }
+system_warn() {
+	RED='\033[0;31m'
+	NC='\033[0m'
+	echo -e "${RED}${1}${NC}"
+}
 center_print "=============================================================
 Kangle one click installation
 This script will build and install kangle.
@@ -18,6 +23,24 @@ More detailed information at
 https://www.xh-ws.com/archives/install_kangle_on_ubuntu.html
 ============================================================="
 echo
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    if [ "$ID" = "ubuntu" ]; then
+		os="ubuntu"
+        echo "Ubuntu detected."
+    elif [ "$ID" = "debian" ]; then
+		os="debian"
+        echo "Debian detected"
+    else
+		os="other"
+		system_warn("Error: You are not using Debian or Ubuntu. Installation may not succeed. Press Enter to continue or Ctrl+C to cancel.")
+        read confirm
+    fi
+else
+	os="other"
+    system_warn("Error: Unable to confirm your operating system. Installation may not succeed. Press Enter to continue or Ctrl+C to cancel.")
+	read confirm
+fi
 #get password
 read -p "Please enter your desired MySQL password. It must be at least 8 characters long and include numbers, both uppercase and lowercase letters, special characters, and not be a common dictionary word.
 Leave blank to not install MySQL:" mysql_password
@@ -160,9 +183,16 @@ Your mysql root password is $mysql_password
 fi
 
 #install PHP
-add-apt-repository ppa:ondrej/php<<EOF
+if [[ $os == "ubuntu" ]];then
+	add-apt-repository ppa:ondrej/php<<EOF
 
 EOF
+else
+	apt install -y software-properties-common ca-certificates lsb-release apt-transport-https
+	sh -c 'echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list'
+	wget -qO - https://packages.sury.org/php/apt.gpg | apt-key add -
+fi
+apt update
 if [[ $mysql_password ]];then
 apt install -y php{5.6,7.4,8.3} php{5.6,7.4,8.3}-{cgi,fpm,curl,mysql,gd,xml,mbstring,zip,intl,soap,bcmath,opcache,gmagick,common,memcached,mcrypt,redis,apcu,ldap} php-mbstring
 else
