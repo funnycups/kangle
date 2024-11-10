@@ -1,5 +1,5 @@
 # kangle
-A shell script to install [kangle web server](https://github.com/keengo99/kangle) on Ubuntu.
+A shell script to install [kangle web server](https://github.com/keengo99/kangle) on Ubuntu/Debian.
 
 This script will build and install kangle, with two versions available:
 
@@ -15,9 +15,12 @@ Usage:
 ```shell
 wget -q https://raw.githubusercontent.com/funnycups/kangle/main/install.sh && bash install.sh
 ```
-More detail information at https://www.xh-ws.com/archives/install_kangle_on_ubuntu.html
+More detail information at https://www.xh-ws.com/archives/install-kangle-on-ubuntu-debian.html
 
 ## Changelog
+### Nov 10, 2024
+- Add Debian support.
+
 ### Nov 4, 2024
 - Bug fix for php-mysql and PHPMyAdmin.
 
