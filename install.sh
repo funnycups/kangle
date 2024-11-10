@@ -33,12 +33,12 @@ if [ -f /etc/os-release ]; then
         echo "Debian detected"
     else
 		os="other"
-		system_warn("Error: You are not using Debian or Ubuntu. Installation may not succeed. Press Enter to continue or Ctrl+C to cancel.")
+		system_warn "Error: You are not using Debian or Ubuntu. Installation may not succeed. Press Enter to continue or Ctrl+C to cancel."
         read confirm
     fi
 else
 	os="other"
-    system_warn("Error: Unable to confirm your operating system. Installation may not succeed. Press Enter to continue or Ctrl+C to cancel.")
+    system_warn "Error: Unable to confirm your operating system. Installation may not succeed. Press Enter to continue or Ctrl+C to cancel."
 	read confirm
 fi
 #get password
