@@ -1,14 +1,15 @@
 # kangle
 A shell script to install [kangle web server](https://github.com/keengo99/kangle) on Ubuntu/Debian.
 
-This script will build and install kangle, with two versions available:
+This script builds and installs kangle, offering three options:
 
-* kangle 3.6.0 with support for HTTP/3, kwebp, and kwaf.
-* kangle 3.5.21.16, using pre-compiled executable files from [here](https://github.com/1265578519/kangle)
+1. kangle 3.6.0 with support for HTTP/3, kwebp, and kwaf.
+2. kangle 3.5.21.16 with [Easypanel](https://github.com/netcccyun/easypanel), using pre-compiled executable files from [this repository](https://github.com/1265578519/kangle)
+3. kangle 3.5.21.16 in Docker with Easypanel, kwebp, kwaf, and TLS-enabled Pure-FTPd
 
-[Easypanel](https://github.com/netcccyun/easypanel) will also be automatically installed if you choose to install kangle 3.5.21.16.
-
-Additionally, the script will install MySQL8, PHPMyAdmin and multiple versions of PHP (5.6, 7.4, and 8.3).
+Additionally, the script will install MySQL8, PHPMyAdmin and multiple PHP versions:
+- PHP 5.6, 7.4, and 8.3 (for options 1 and 2).
+- PHP 5.6, 7.2, and 8.0 (for option 3).
 
 Usage:
 
@@ -18,6 +19,9 @@ wget -q https://raw.githubusercontent.com/funnycups/kangle/main/install.sh && ba
 More detail information at https://www.xh-ws.com/archives/install-kangle-on-ubuntu-debian.html
 
 ## Changelog
+### Dec 7, 2024
+- Add docker support.
+
 ### Nov 10, 2024
 - Add Debian support.
 
