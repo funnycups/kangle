@@ -18,7 +18,7 @@ system_warn() {
 center_print "=============================================================
 Kangle one click installation
 This script will build and install kangle.
-Easypanel, MySQL8, PHPMyAdmin and multiple versions of PHP (5.6, 7.4, and 8.3) would be installed.
+Easypanel, MySQL8, PHPMyAdmin and multiple versions of PHP would be installed.
 More detailed information at
 https://www.xh-ws.com/archives/install_kangle_on_ubuntu.html
 ============================================================="
@@ -157,21 +157,7 @@ else
 	#launch kangle images
 	docker pull funnycups/kangle
 	mkdir -p /home/ftp
-	docker run -d --network host -v /home/ftp:/home/ftp --name kangle funnycups/kangle
-	#set service
-	echo "[Unit]
-Description=Kangle Web Server
-After=network.target
-[Service]
-ExecStart=docker start kangle
-ExecStop=docker stop kangle
-ExecReload=docker exec kangle /vhs/kangle/bin/kangle -r
-Restart=on-failure
-Type=forking
-[Install]
-WantedBy=multi-user.target" >/etc/systemd/system/kangle.service
-	systemctl daemon-reload
-	systemctl enable kangle
+	docker run -d --network host -v /home/ftp:/home/ftp --name kangle --restart unless-stopped funnycups/kangle
 fi
 MYSQL_INTRO=
 if [[ $mysql_password ]]; then
@@ -271,14 +257,18 @@ HOME=/
 		unzip -o tpl_php.zip
 		rm -rf tpl_php.zip
 	fi
+
+	#start Kangle
+	systemctl start kangle
 else
 	echo 'SHELL=/bin/bash
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 HOME=/
 */5 * * * * root docker exec kangle /vhs/kangle/ext/tpl_php5640/bin/php -c /vhs/kangle/ext/tpl_php52/etc/php-node-5640.ini /vhs/kangle/nodewww/webftp/framework/shell.php sync_flow' >/etc/cron.d/ep_sync_flow
+	systemctl restart cron
+	EASYPANEL_INTRO="Easypanel is at http://127.0.0.1:3312/admin
+"
 fi
-#start Kangle
-systemctl start kangle
 
 #remove temp files
 cd ~
