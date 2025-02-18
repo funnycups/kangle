@@ -14,7 +14,7 @@ Additionally, the script will install MySQL8, PHPMyAdmin and multiple PHP versio
 Usage:
 
 ```shell
-wget -q https://raw.githubusercontent.com/funnycups/kangle/main/install.sh && bash install.sh
+wget -q -O install.sh https://raw.githubusercontent.com/funnycups/kangle/main/install.sh && bash install.sh
 ```
 More detail information at https://www.xh-ws.com/archives/install-kangle-on-ubuntu-debian.html
 
