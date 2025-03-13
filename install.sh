@@ -164,6 +164,8 @@ else
 	rm -rf etc.tar.gz
 	cd -
 	docker run -d --network host -v /home/ftp:/home/ftp -v /vhs/kangle/etc:/vhs/kangle/etc -v /etc/localtime:/etc/localtime:ro --name kangle --restart unless-stopped funnycups/kangle
+  docker exec kangle openssl req -x509 -nodes -days 7300 -newkey rsa:2048 -keyout /vhs/pure-ftpd/etc/ssl/private/pure-ftpd.pem -out /vhs/pure-ftpd/etc/ssl/private/pure-ftpd.pem -subj "/C=US/ST=California/L=San Francisco/O=FTP/OU=./CN=."
+  docker exec kangle systemctl restart pureftpd
 fi
 MYSQL_INTRO=
 if [[ $mysql_password ]]; then

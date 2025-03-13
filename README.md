@@ -19,7 +19,7 @@ More detail information at https://www.xh-ws.com/archives/install-kangle-on-ubun
 
 ## Changelog
 ### Mar 14, 2025
-- Bug fix for Docker installation.
+- Bug fix for Docker installation and Pure-FTPd TLS error.
 - Docker installation now install PHP7.4 instead of PHP7.2.
 - Docker installation now run Easypanel under PHP7.4 instead of PHP5.6, which should solve problems on MySQL8 connection.
 - Refactor the project directory structure for better clarity and organization.
