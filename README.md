@@ -8,8 +8,7 @@ This script builds and installs kangle, offering three options:
 3. kangle 3.5.21.16 in Docker with Easypanel, kwebp, kwaf, and TLS-enabled Pure-FTPd
 
 Additionally, the script will install MySQL8, PHPMyAdmin and multiple PHP versions:
-- PHP 5.6, 7.4, and 8.3 (for options 1 and 2).
-- PHP 5.6, 7.2, and 8.0 (for option 3).
+- PHP 5.6, 7.4, and 8.3.
 
 Usage:
 
@@ -19,6 +18,14 @@ wget -q -O install.sh https://raw.githubusercontent.com/funnycups/kangle/main/in
 More detail information at https://www.xh-ws.com/archives/install-kangle-on-ubuntu-debian.html
 
 ## Changelog
+### Mar 14, 2025
+- Bug fix for Docker installation.
+- Docker installation now install PHP7.4 instead of PHP7.2.
+- Docker installation now run Easypanel under PHP7.4 instead of PHP5.6, which should solve problems on MySQL8 connection.
+- Refactor the project directory structure for better clarity and organization.
+- Synchronize container time with host time.
+- Save vhost configuration files in the host directory for easy access and backup.
+
 ### Dec 7, 2024
 - Add docker support.
 

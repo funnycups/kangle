@@ -20,7 +20,7 @@ Kangle one click installation
 This script will build and install kangle.
 Easypanel, MySQL8, PHPMyAdmin and multiple versions of PHP would be installed.
 More detailed information at
-https://www.xh-ws.com/archives/install_kangle_on_ubuntu.html
+https://www.cups.moe/archives/install-kangle-on-ubuntu-debian.html
 ============================================================="
 echo
 if [ -f /etc/os-release ]; then
@@ -104,7 +104,7 @@ if [[ $kangle_ver != 3 ]]; then
 		cmake -DCMAKE_INSTALL_PREFIX=/vhs/kangle -DZSTD_DIR=~/install/zstd -DENABLE_BROTLI=ON -DBORINGSSL_DIR=~/install/boringssl -DLSQUIC_DIR=~/install/lsquic -DENABLE_FCONTEXT=1 ..
 		make && make install
 	else
-		wget https://raw.githubusercontent.com/funnycups/kangle/main/kangle-3.5.21.16.tar.gz -O kangle.tar.gz
+		wget https://raw.githubusercontent.com/funnycups/kangle/main/3.5.21.16/kangle-3.5.21.16.tar.gz -O kangle.tar.gz
 		tar zxvf kangle.tar.gz
 		mkdir -p /vhs/kangle
 		cp -rf kangle/* /vhs/kangle
@@ -157,7 +157,13 @@ else
 	#launch kangle images
 	docker pull funnycups/kangle
 	mkdir -p /home/ftp
-	docker run -d --network host -v /home/ftp:/home/ftp --name kangle --restart unless-stopped funnycups/kangle
+	mkdir -p /vhs/kangle
+	cd /vhs/kangle
+	wget https://raw.githubusercontent.com/funnycups/kangle/main/docker/etc.tar.gz
+	tar zxvf etc.tar.gz
+	rm -rf etc.tar.gz
+	cd -
+	docker run -d --network host -v /home/ftp:/home/ftp -v /vhs/kangle/etc:/vhs/kangle/etc -v /etc/localtime:/etc/localtime:ro --name kangle --restart unless-stopped funnycups/kangle
 fi
 MYSQL_INTRO=
 if [[ $mysql_password ]]; then
@@ -183,15 +189,17 @@ EOF
 	fi
 
 	#install PHPMyAdmin
-	cd /vhs/kangle
-	mkdir -p nodewww/dbadmin
-	cd nodewww/dbadmin
-	wget https://files.phpmyadmin.net/phpMyAdmin/5.2.1/phpMyAdmin-5.2.1-all-languages.zip
-	unzip phpMyAdmin-5.2.1-all-languages.zip
-	rm -rf phpMyAdmin-5.2.1-all-languages.zip
-	mv phpMyAdmin-5.2.1-all-languages mysql
-	cd mysql
-	mv config.sample.inc.php config.inc.php
+	if [[ $kangle_ver != 3 ]]; then
+		cd /vhs/kangle
+		mkdir -p nodewww/dbadmin
+		cd nodewww/dbadmin
+		wget https://files.phpmyadmin.net/phpMyAdmin/5.2.1/phpMyAdmin-5.2.1-all-languages.zip
+		unzip phpMyAdmin-5.2.1-all-languages.zip
+		rm -rf phpMyAdmin-5.2.1-all-languages.zip
+		mv phpMyAdmin-5.2.1-all-languages mysql
+		cd mysql
+		mv config.sample.inc.php config.inc.php
+	fi
 	MYSQL_INTRO="PHPMyAdmin is at http://127.0.0.1:3313/mysql
 Your mysql root password is $mysql_password
 "
@@ -220,7 +228,7 @@ EOF
 	if [[ $kangle_ver == 2 ]]; then
 		apt install php7.4-sqlite3
 		cd ~/install
-		wget https://raw.githubusercontent.com/funnycups/kangle/main/easypanel-2.6.26.tar.gz -O easypanel.tar.gz
+		wget https://raw.githubusercontent.com/funnycups/kangle/main/3.5.21.16/easypanel-2.6.26.tar.gz -O easypanel.tar.gz
 		tar zxvf easypanel.tar.gz
 		cd easypanel-2.6.26-x86_64
 		cp -rf * /vhs/kangle
@@ -244,16 +252,16 @@ HOME=/
 	cd /vhs/kangle
 	mkdir -p www
 	cd www
-	wget -O index.html https://raw.githubusercontent.com/funnycups/kangle/main/index.html
+	wget -O index.html https://raw.githubusercontent.com/funnycups/kangle/main/static/index.html
 
 	#set up etc config
 	cd /vhs/kangle/etc
 	if [[ $kangle_ver == 1 ]]; then
-		wget -O config.xml https://raw.githubusercontent.com/funnycups/kangle/main/config.xml
+		wget -O config.xml https://raw.githubusercontent.com/funnycups/kangle/main/3.6.0/config.xml
 	else
-		wget -O config.xml https://raw.githubusercontent.com/funnycups/kangle/main/config-3.5.21.16.xml
+		wget -O config.xml https://raw.githubusercontent.com/funnycups/kangle/main/3.5.21.16/config-3.5.21.16.xml
 		cd /vhs/kangle/ext
-		wget https://raw.githubusercontent.com/funnycups/kangle/main/tpl_php.zip
+		wget https://raw.githubusercontent.com/funnycups/kangle/main/3.5.21.16/tpl_php.zip
 		unzip -o tpl_php.zip
 		rm -rf tpl_php.zip
 	fi
@@ -264,7 +272,7 @@ else
 	echo 'SHELL=/bin/bash
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 HOME=/
-*/5 * * * * root docker exec kangle /vhs/kangle/ext/tpl_php5640/bin/php -c /vhs/kangle/ext/tpl_php52/etc/php-node-5640.ini /vhs/kangle/nodewww/webftp/framework/shell.php sync_flow' >/etc/cron.d/ep_sync_flow
+*/5 * * * * root docker exec kangle /vhs/kangle/ext/tpl_php56/bin/php -c /vhs/kangle/ext/tpl_php52/etc/php-node-5640.ini /vhs/kangle/nodewww/webftp/framework/shell.php sync_flow' >/etc/cron.d/ep_sync_flow
 	systemctl restart cron
 	EASYPANEL_INTRO="Easypanel is at http://127.0.0.1:3312/admin
 "
