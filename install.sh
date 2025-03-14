@@ -171,20 +171,31 @@ MYSQL_INTRO=
 if [[ $mysql_password ]]; then
 	#install MySQL
 	if [[ $os == "ubuntu" ]]; then
+	  #compatible with docker image
+	  sql=""
+	  if [[ $kangle_ver == 3 ]]; then
+      sql="ALTER USER root@127.0.0.1 IDENTIFIED WITH mysql_native_password BY '$mysql_password';"
+    fi
 		apt install -y mysql-server
 		mysql <<EOF
 USE mysql;
 UPDATE user SET plugin='mysql_native_password' WHERE User='root';
 flush privileges;
 ALTER USER root@localhost IDENTIFIED WITH mysql_native_password BY '$mysql_password';
+$sql
 flush privileges;
 exit;
 EOF
 	else
+	  sql=""
+	  if [[ $kangle_ver == 3 ]]; then
+      sql="ALTER USER root@127.0.0.1 IDENTIFIED BY '$mysql_password';"
+    fi
 		apt install -y mariadb-server
 		mysql <<EOF
 USE mysql;
 ALTER USER root@localhost IDENTIFIED BY '$mysql_password';
+$sql
 flush privileges;
 exit;
 EOF
