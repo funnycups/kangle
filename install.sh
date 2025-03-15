@@ -163,7 +163,13 @@ else
 	tar zxvf etc.tar.gz
 	rm -rf etc.tar.gz
 	cd -
-	docker run -d --network host -v /home/ftp:/home/ftp -v /vhs/kangle/etc:/vhs/kangle/etc -v /etc/localtime:/etc/localtime:ro --name kangle --restart unless-stopped funnycups/kangle
+	if [[ $mysql_password ]]; then
+	  #enable socket connection
+	  mkdir -p /var/run/mysqld
+	  docker run -d --network host -v /home/ftp:/home/ftp -v /vhs/kangle/etc:/vhs/kangle/etc -v /etc/localtime:/etc/localtime:ro -v /var/run/mysqld:/var/run/mysqld --name kangle --restart unless-stopped funnycups/kangle
+	else
+	  docker run -d --network host -v /home/ftp:/home/ftp -v /vhs/kangle/etc:/vhs/kangle/etc -v /etc/localtime:/etc/localtime:ro --name kangle --restart unless-stopped funnycups/kangle
+  fi
   docker exec kangle openssl req -x509 -nodes -days 7300 -newkey rsa:2048 -keyout /vhs/pure-ftpd/etc/ssl/private/pure-ftpd.pem -out /vhs/pure-ftpd/etc/ssl/private/pure-ftpd.pem -subj "/C=US/ST=California/L=San Francisco/O=FTP/OU=./CN=."
   docker exec kangle systemctl restart pureftpd
 fi
@@ -213,6 +219,11 @@ EOF
 		cd mysql
 		mv config.sample.inc.php config.inc.php
 	fi
+
+	#enable socket connection
+	if [[ $kangle_ver == 3 ]]; then
+	  chmod 755 /var/run/mysqld
+  fi
 	MYSQL_INTRO="PHPMyAdmin is at http://127.0.0.1:3313/mysql
 Your mysql root password is $mysql_password
 "

@@ -18,6 +18,9 @@ wget -q -O install.sh https://raw.githubusercontent.com/funnycups/kangle/main/in
 More detail information at https://www.xh-ws.com/archives/install-kangle-on-ubuntu-debian.html
 
 ## Changelog
+### Mar 15, 2025
+- Enable MySQL socket connection for docker installation.
+
 ### Mar 14, 2025
 - Bug fix for Docker installation and Pure-FTPd TLS error.
 - Docker installation now install PHP7.4 instead of PHP7.2.
