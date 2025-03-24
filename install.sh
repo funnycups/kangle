@@ -286,7 +286,7 @@ HOME=/
 	if [[ $kangle_ver == 1 ]]; then
 		wget -O config.xml https://raw.githubusercontent.com/funnycups/kangle/main/3.6.0/config.xml
 		#set up random password
-		sed -i "s|password='kangle'|password='$password_md5'|g" /vhs/kangle/etc/config.xml
+		sed -i "s|password='kangle'|password='$password'|g" /vhs/kangle/etc/config.xml
 	else
 		wget -O config.xml https://raw.githubusercontent.com/funnycups/kangle/main/3.5.21.16/config-3.5.21.16.xml
 		cd /vhs/kangle/ext
