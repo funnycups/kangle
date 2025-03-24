@@ -89,6 +89,9 @@ if [[ $kangle_ver != 3 ]]; then
 	make && make install
 
 	#install kangle
+	#generate default password for panel
+  password=$(openssl rand -base64 24 | tr -dc 'a-zA-Z0-9!@#$%^&*()' | head -c 16)
+  password_md5=$(echo -n "$password" | md5sum | awk '{print $1}')
 	cd ~/install
 	if [[ $kangle_ver == 1 ]]; then
 		git clone https://github.com/litespeedtech/lsquic
@@ -166,9 +169,9 @@ else
 	if [[ $mysql_password ]]; then
 	  #enable socket connection
 	  mkdir -p /var/run/mysqld
-	  docker run -d --network host -v /home/ftp:/home/ftp -v /vhs/kangle/etc:/vhs/kangle/etc -v /etc/localtime:/etc/localtime:ro -v /var/run/mysqld:/var/run/mysqld --name kangle --restart unless-stopped funnycups/kangle
+	  docker create -d --network host -v /home/ftp:/home/ftp -v /vhs/kangle/etc:/vhs/kangle/etc -v /etc/localtime:/etc/localtime:ro -v /var/run/mysqld:/var/run/mysqld --name kangle --restart unless-stopped funnycups/kangle
 	else
-	  docker run -d --network host -v /home/ftp:/home/ftp -v /vhs/kangle/etc:/vhs/kangle/etc -v /etc/localtime:/etc/localtime:ro --name kangle --restart unless-stopped funnycups/kangle
+	  docker create -d --network host -v /home/ftp:/home/ftp -v /vhs/kangle/etc:/vhs/kangle/etc -v /etc/localtime:/etc/localtime:ro --name kangle --restart unless-stopped funnycups/kangle
   fi
   docker exec kangle openssl req -x509 -nodes -days 7300 -newkey rsa:2048 -keyout /vhs/pure-ftpd/etc/ssl/private/pure-ftpd.pem -out /vhs/pure-ftpd/etc/ssl/private/pure-ftpd.pem -subj "/C=US/ST=California/L=San Francisco/O=FTP/OU=./CN=."
   docker exec kangle systemctl restart pureftpd
@@ -282,15 +285,19 @@ HOME=/
 	cd /vhs/kangle/etc
 	if [[ $kangle_ver == 1 ]]; then
 		wget -O config.xml https://raw.githubusercontent.com/funnycups/kangle/main/3.6.0/config.xml
+		#set up random password
+		sed -i "s|password='kangle'|password='$password_md5'|g" /vhs/kangle/etc/config.xml
 	else
 		wget -O config.xml https://raw.githubusercontent.com/funnycups/kangle/main/3.5.21.16/config-3.5.21.16.xml
 		cd /vhs/kangle/ext
 		wget https://raw.githubusercontent.com/funnycups/kangle/main/3.5.21.16/tpl_php.zip
 		unzip -o tpl_php.zip
 		rm -rf tpl_php.zip
+		#set up random password
+    sed -i "s|<admin user=\"admin\" password=\"kangle\" admin_ips=\"127.0.0.1\|\*\"/>|<admin user='admin' password='$password_md5' crypt='md5' auth_type='Basic' admin_ips='*'/>|g" /vhs/kangle/etc/config.xml
 	fi
 
-	#start Kangle
+  #start Kangle
 	systemctl start kangle
 else
 	echo 'SHELL=/bin/bash
@@ -300,6 +307,9 @@ HOME=/
 	systemctl restart cron
 	EASYPANEL_INTRO="Easypanel is at http://127.0.0.1:3312/admin
 "
+  #set up random password
+  sed -i "s|<admin user=\"admin\" password=\"kangle\" admin_ips=\"127.0.0.1\|\*\"/>|<admin user='admin' password='$password_md5' crypt='md5' auth_type='Basic' admin_ips='*'/>|g" /vhs/kangle/etc/config.xml
+  docker start kangle
 fi
 
 #remove temp files
@@ -309,6 +319,6 @@ rm -rf install
 center_print "=============================================================
 All done!
 You can now visit kangle panel through http://127.0.0.1:3311
-${EASYPANEL_INTRO}Username:admin, password:kangle.
+${EASYPANEL_INTRO}Username:admin, password:${password}.
 ${MYSQL_INTRO}Please feel free to report any issue!
 ============================================================="

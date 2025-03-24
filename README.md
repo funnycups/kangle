@@ -18,6 +18,9 @@ wget -q -O install.sh https://raw.githubusercontent.com/funnycups/kangle/main/in
 More detail information at https://www.xh-ws.com/archives/install-kangle-on-ubuntu-debian.html
 
 ## Changelog
+### Mar 24, 2025
+- Generate random password instead of default `kangle` for panel.
+
 ### Mar 15, 2025
 - Enable MySQL socket connection for docker installation.
 
