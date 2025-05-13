@@ -169,9 +169,9 @@ else
 	if [[ $mysql_password ]]; then
 	  #enable socket connection
 	  mkdir -p /var/run/mysqld
-	  docker create -d --network host -v /home/ftp:/home/ftp -v /vhs/kangle/etc:/vhs/kangle/etc -v /etc/localtime:/etc/localtime:ro -v /var/run/mysqld:/var/run/mysqld --name kangle --restart unless-stopped funnycups/kangle
+	  docker create --network host -v /home/ftp:/home/ftp -v /vhs/kangle/etc:/vhs/kangle/etc -v /etc/localtime:/etc/localtime:ro -v /var/run/mysqld:/var/run/mysqld --name kangle --restart unless-stopped funnycups/kangle
 	else
-	  docker create -d --network host -v /home/ftp:/home/ftp -v /vhs/kangle/etc:/vhs/kangle/etc -v /etc/localtime:/etc/localtime:ro --name kangle --restart unless-stopped funnycups/kangle
+	  docker create --network host -v /home/ftp:/home/ftp -v /vhs/kangle/etc:/vhs/kangle/etc -v /etc/localtime:/etc/localtime:ro --name kangle --restart unless-stopped funnycups/kangle
   fi
   docker exec kangle openssl req -x509 -nodes -days 7300 -newkey rsa:2048 -keyout /vhs/pure-ftpd/etc/ssl/private/pure-ftpd.pem -out /vhs/pure-ftpd/etc/ssl/private/pure-ftpd.pem -subj "/C=US/ST=California/L=San Francisco/O=FTP/OU=./CN=."
   docker exec kangle systemctl restart pureftpd
