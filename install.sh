@@ -308,7 +308,7 @@ HOME=/
 	EASYPANEL_INTRO="Easypanel is at http://127.0.0.1:3312/admin
 "
   #set up random password
-  sed -i "s|<admin user=\"admin\" password=\"kangle\" admin_ips=\"127.0.0.1\|\*\"/>|<admin user='admin' password='$password_md5' crypt='md5' auth_type='Basic' admin_ips='*'/>|g" /vhs/kangle/etc/config.xml
+  docker exec kangle sed -i "s|<admin user=\"admin\" password=\"kangle\" admin_ips=\"127.0.0.1\|\*\"/>|<admin user='admin' password='$password_md5' crypt='md5' auth_type='Basic' admin_ips='*'/>|g" /vhs/kangle/etc/config.xml
   docker start kangle
 fi
 

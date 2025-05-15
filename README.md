@@ -18,6 +18,12 @@ wget -q -O install.sh https://raw.githubusercontent.com/funnycups/kangle/main/in
 More detail information at https://www.xh-ws.com/archives/install-kangle-on-ubuntu-debian.html
 
 ## Changelog
+### May 15, 2025
+- Fix random password for docker installation.
+
+### May 13, 2025
+- Fix docker container setup.
+
 ### Mar 24, 2025
 - Generate random password instead of default `kangle` for panel.
 
