@@ -15,7 +15,7 @@ Usage:
 ```shell
 wget -q -O install.sh https://raw.githubusercontent.com/funnycups/kangle/main/install.sh && bash install.sh
 ```
-More detail information at https://www.xh-ws.com/archives/install-kangle-on-ubuntu-debian.html
+More detail information at https://www.cups.moe/archives/install-kangle-on-ubuntu-debian.html
 
 ## Changelog
 ### May 15, 2025
