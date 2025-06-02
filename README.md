@@ -18,6 +18,9 @@ wget -q -O install.sh https://raw.githubusercontent.com/funnycups/kangle/main/in
 More detail information at https://www.cups.moe/archives/install-kangle-on-ubuntu-debian.html
 
 ## Changelog
+### Jun 2, 2025
+- Install docker following the official guide.
+
 ### May 15, 2025
 - Fix random password for docker installation.
 
