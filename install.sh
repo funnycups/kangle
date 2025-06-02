@@ -318,7 +318,7 @@ HOME=/
 		unzip -o tpl_php.zip
 		rm -rf tpl_php.zip
 		#set up random password
-    sed -i "s|<admin user=\"admin\" password=\"kangle\" admin_ips=\"127.0.0.1\|\*\"/>|<admin user='admin' password='$password_md5' crypt='md5' auth_type='Basic' admin_ips='*'/>|g" /vhs/kangle/etc/config.xml
+    sed -i "s|<admin user='admin' password='kangle' admin_ips='127.0.0.1\|\*'/>|<admin user='admin' password='$password_md5' crypt='md5' auth_type='Basic' admin_ips='*'/>|g" /vhs/kangle/etc/config.xml
 	fi
 
   #start Kangle
@@ -332,7 +332,7 @@ HOME=/
 	EASYPANEL_INTRO="Easypanel is at http://127.0.0.1:3312/admin
 "
   #set up random password
-  docker exec kangle sed -i "s|<admin user=\"admin\" password=\"kangle\" admin_ips=\"127.0.0.1\|\*\"/>|<admin user='admin' password='$password_md5' crypt='md5' auth_type='Basic' admin_ips='*'/>|g" /vhs/kangle/etc/config.xml
+  docker exec kangle sed -i "s|<admin user='admin' password='kangle' admin_ips='127.0.0.1\|\*'/>|<admin user='admin' password='$password_md5' crypt='md5' auth_type='Basic' admin_ips='*'/>|g" /vhs/kangle/etc/config.xml
   docker start kangle
 fi
 
@@ -343,6 +343,6 @@ rm -rf install
 center_print "=============================================================
 All done!
 You can now visit kangle panel through http://127.0.0.1:3311
-${EASYPANEL_INTRO}Username:admin, password:${password}.
+${EASYPANEL_INTRO}Username:admin, password:${password}
 ${MYSQL_INTRO}Please feel free to report any issue!
 ============================================================="

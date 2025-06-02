@@ -20,6 +20,7 @@ More detail information at https://www.cups.moe/archives/install-kangle-on-ubunt
 ## Changelog
 ### Jun 2, 2025
 - Install docker following the official guide.
+- Fix random password set up.
 
 ### May 15, 2025
 - Fix random password for docker installation.
