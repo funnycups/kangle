@@ -198,10 +198,11 @@ else
 	  docker create --network host -v /home/ftp:/home/ftp -v /vhs/kangle/etc:/vhs/kangle/etc -v /etc/localtime:/etc/localtime:ro -v /var/run/mysqld:/var/run/mysqld --name kangle --restart unless-stopped funnycups/kangle
 	else
 	  docker create --network host -v /home/ftp:/home/ftp -v /vhs/kangle/etc:/vhs/kangle/etc -v /etc/localtime:/etc/localtime:ro --name kangle --restart unless-stopped funnycups/kangle
-  fi
-  docker exec kangle openssl req -x509 -nodes -days 7300 -newkey rsa:2048 -keyout /vhs/pure-ftpd/etc/ssl/private/pure-ftpd.pem -out /vhs/pure-ftpd/etc/ssl/private/pure-ftpd.pem -subj "/C=US/ST=California/L=San Francisco/O=FTP/OU=./CN=."
-  docker exec kangle systemctl restart pureftpd
-fi
+	fi
+	docker start kangle
+	docker exec kangle openssl req -x509 -nodes -days 7300 -newkey rsa:2048 -keyout /vhs/pure-ftpd/etc/ssl/private/pure-ftpd.pem -out /vhs/pure-ftpd/etc/ssl/private/pure-ftpd.pem -subj "/C=US/ST=California/L=San Francisco/O=FTP/OU=./CN=."
+	docker exec kangle systemctl restart pureftpd
+	fi
 MYSQL_INTRO=
 if [[ $mysql_password ]]; then
 	#install MySQL
@@ -335,7 +336,7 @@ HOME=/
 "
   #set up random password
   docker exec kangle sed -i "s|<admin user='admin' password='kangle' admin_ips='127.0.0.1\|\*'/>|<admin user='admin' password='$password_md5' crypt='md5' auth_type='Basic' admin_ips='*'/>|g" /vhs/kangle/etc/config.xml
-  docker start kangle
+  docker restart kangle
 fi
 
 #remove temp files
