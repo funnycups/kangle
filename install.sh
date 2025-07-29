@@ -54,6 +54,11 @@ if [[ $kangle_ver != 1 && $kangle_ver != 2 && $kangle_ver != 3 ]]; then
 	echo "Unknown input!"
 	exit 1
 fi
+
+# generate default password for panel
+password=$(openssl rand -base64 24 | tr -dc 'a-zA-Z0-9!@#$%^&*()' | head -c 16)
+password_md5=$(echo -n "$password" | md5sum | awk '{print $1}')
+
 #install essentials
 sed -i 's/#$nrconf{restart} = '"'"'i'"'"';/$nrconf{restart} = '"'"'a'"'"';/g' /etc/needrestart/needrestart.conf
 apt update -y
@@ -89,9 +94,6 @@ if [[ $kangle_ver != 3 ]]; then
 	make && make install
 
 	#install kangle
-	#generate default password for panel
-  password=$(openssl rand -base64 24 | tr -dc 'a-zA-Z0-9!@#$%^&*()' | head -c 16)
-  password_md5=$(echo -n "$password" | md5sum | awk '{print $1}')
 	cd ~/install
 	if [[ $kangle_ver == 1 ]]; then
 		git clone https://github.com/litespeedtech/lsquic
